@@ -1,97 +1,147 @@
-function login(){
-
-document.getElementById("loginPage").style.display="none";
-
-document.getElementById("easyAccess").style.display="block";
-
-}
-
-function openZeasy(){
-
-if(document.getElementById("tcode").value.toUpperCase()=="ZEASY"){
-
-document.getElementById("easyAccess").style.display="none";
-
-document.getElementById("zeasyPage").style.display="block";
-
-}
-
-}
-
-function showTab(tab){
-
-document.querySelectorAll(".tab-content")
-
-.forEach(x=>x.style.display="none");
-
-document.getElementById(tab).style.display="block";
-
-}
-
-function searchBP(){
-
-document.getElementById("bpArea")
-
-.style.display="block";
-
-}
-
-function showPurchasing(){
-
-document.getElementById("purchaseBox")
-
-.style.display="block";
-
-}
-
 function submitRequest(){
 
-let req="ZE"+Math.floor(
+    let sourceOrg =
+        document.querySelector("select").value;
 
-100000+Math.random()*900000
+    let newPurch =
+        document.getElementById("newPurch").value.trim();
 
-);
+    // Clear previous messages
+    document.getElementById("successBox").innerHTML = "";
 
-document.getElementById("successBox")
+    // Validation 1
+    if(newPurch === ""){
 
-.style.display="block";
+        document.getElementById("successBox").style.display = "block";
 
-document.getElementById("successBox")
+        document.getElementById("successBox").innerHTML = `
 
-.innerHTML=`
+        <div style="
+            background:#ffd9d9;
+            color:#a10000;
+            padding:15px;
+            border:1px solid #ff9999;
+            border-radius:5px;
+        ">
 
-<div class='success'>
+        ❌ Error : Please enter New Purchasing Organisation
 
-✓ Request Submitted Successfully
+        </div>
 
-<br><br>
+        `;
 
-Request Number : ${req}
+        return;
+    }
 
-<br><br>
+    // Validation 2
+    if(newPurch === sourceOrg){
 
-Status : Pending
+        document.getElementById("successBox").style.display = "block";
 
-</div>
+        document.getElementById("successBox").innerHTML = `
 
-`;
+        <div style="
+            background:#ffd9d9;
+            color:#a10000;
+            padding:15px;
+            border:1px solid #ff9999;
+            border-radius:5px;
+        ">
 
-document.getElementById("statusTable")
+        ❌ Error : New Purchasing Organisation cannot be same as Source Purchasing Organisation
 
-.innerHTML+=`
+        </div>
 
-<tr>
+        `;
 
-<td>${req}</td>
+        return;
+    }
 
-<td>10002345</td>
+    // Validation 3
+    if(newPurch.length !== 4){
 
-<td>Purchasing Org</td>
+        document.getElementById("successBox").style.display = "block";
 
-<td>Pending</td>
+        document.getElementById("successBox").innerHTML = `
 
-</tr>
+        <div style="
+            background:#ffd9d9;
+            color:#a10000;
+            padding:15px;
+            border:1px solid #ff9999;
+            border-radius:5px;
+        ">
 
-`;
+        ❌ Error : Purchasing Organisation must be 4 digits
+
+        </div>
+
+        `;
+
+        return;
+    }
+
+    // Generate Request Number
+    let req =
+        "ZE" +
+        Math.floor(
+            100000 + Math.random() * 900000
+        );
+
+    document.getElementById("successBox").style.display = "block";
+
+    document.getElementById("successBox").innerHTML = `
+
+    <div style="
+        background:#d4edda;
+        color:#155724;
+        padding:20px;
+        border:1px solid #c3e6cb;
+        border-radius:5px;
+    ">
+
+    ✓ Request Submitted Successfully
+
+    <br><br>
+
+    Request Number : <b>${req}</b>
+
+    <br><br>
+
+    Business Partner : 10002345
+
+    <br><br>
+
+    Source Purchasing Organisation : ${sourceOrg}
+
+    <br><br>
+
+    New Purchasing Organisation : ${newPurch}
+
+    <br><br>
+
+    Status : Pending Approval
+
+    </div>
+
+    `;
+
+    document.getElementById("statusTable").innerHTML += `
+
+    <tr>
+
+        <td>${req}</td>
+
+        <td>10002345</td>
+
+        <td>Purchasing Organisation Extension</td>
+
+        <td>Pending</td>
+
+    </tr>
+
+    `;
+
+    document.getElementById("newPurch").value = "";
 
 }
